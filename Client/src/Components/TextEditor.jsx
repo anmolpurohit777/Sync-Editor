@@ -5,8 +5,14 @@ import '../index.css'
 import {io} from "socket.io-client"
 import { useParams } from "react-router-dom"
 const TOOLBAR_OPTIONS = [
+  [{ font: [] }],
+  [{ color: [] }, { background: [] }],
   ["bold", "italic", "underline"],
-]
+  [{ header: 1 }, { header: 2 }, { header: 3 }, { header: 4 }, { header: 5 }, { header: 6 }],
+  [{ list: "ordered" }, { list: "bullet" }],
+  [{ align: [] }],
+  ["clean"],
+];
 const SAVE_INTERVAL=2000;
 
 export default function TextEditor() {

@@ -9,7 +9,7 @@ mongoose.connect("mongodb://localhost/SyncDB")
 
 const io=require('socket.io')(3001,{
     cors:{
-        origin:"http://localhost:5173",
+        origin:"*",
         methods:["GET","POST"],
     }
 });
@@ -46,6 +46,3 @@ async function findOrCreateDoc(id){
 
     return await Document.create({_id:id,data:defaultValues});
 }
-
-
-//console.log('Socket.IO server running on port 3001');
