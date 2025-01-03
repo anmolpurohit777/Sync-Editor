@@ -4,6 +4,8 @@ import "quill/dist/quill.snow.css"
 import '../index.css'
 import {io} from "socket.io-client"
 import { useParams } from "react-router-dom"
+import { exportToWord } from '../Utilities/exportToWord'
+
 const TOOLBAR_OPTIONS = [
   [{ font: [] }],
   [{ color: [] }, { background: [] }],
@@ -22,7 +24,7 @@ export default function TextEditor() {
 
 
   useEffect(()=>{
-    const s=io("https://sync-editor-backend.vercel.app/");
+    const s=io("http://localhost:3001");
     setSocket(s);
 
     return ()=>{
@@ -38,6 +40,12 @@ export default function TextEditor() {
       quill.enable();
     });
     socket.emit("get-document",documentId);
+
+    const toolbar = quill.getModule("toolbar");
+    const button = document.createElement("button");
+    button.innerHTML = "💾"; // Add an icon or text
+    button.addEventListener("click", () => exportToWord(quill)); // Attach the click handler
+    toolbar.container.appendChild(button); // Append the button to the toolbar
   },[socket,quill,documentId])
 
   useEffect(()=>{
@@ -90,6 +98,7 @@ export default function TextEditor() {
     q.setText("Loading...");
     setQuill(q);
     },[]);
+
   return (
     <>
         <div className="container" ref={wrapperRef}>

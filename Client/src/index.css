@@ -3,7 +3,7 @@
 }
 
 body {
-  background-color: #F3F3F3;
+  background-color: #000000;
   margin: 0;
 }
 
@@ -12,7 +12,7 @@ body {
   min-height: 11in;
   padding: 1in;
   margin: 1rem;
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);
+  box-shadow: 0 0 15px 0 rgb(19, 58, 255);
   background-color: white;
 }
 
@@ -30,7 +30,7 @@ body {
   z-index: 1;
   background-color: #F3F3F3;
   border: none;
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);
+  box-shadow: 0 0 10px 0 rgb(19, 58, 255);
 }
 
 @page {
@@ -54,4 +54,8 @@ body {
   .container .ql-toolbar.ql-snow {
     display: none;
   }
+}
+
+.ql-save::before {
+  content: '💾'; /* Save icon */
 }
