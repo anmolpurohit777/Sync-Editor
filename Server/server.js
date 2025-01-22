@@ -1,10 +1,7 @@
 const mongoose=require("mongoose");
 const Document=require("./Document");
 
-//const uri = "mongodb+srv://anmolpurohit04:password1234@anmol.gt69c.mongodb.net/admin/?retryWrites=true&w=majority";
 const url="mongodb://localhost:27017/";
-//const pratik_db="mongodb+srv://prajapatipm16:3ClpFm4uUsxIKPjM@portfolio.noz1l.mongodb.net/PortfolioDB?retryWrites=true&w=majority&appName=PortFolio";
-
 mongoose.connect(url)
   .then(() => console.log(`Connected to MongoDB--->${mongoose.connection.host}`))
   .catch(err => console.log("Error connecting to MongoDB", err));
