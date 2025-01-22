@@ -1,8 +1,12 @@
 const mongoose=require("mongoose");
 const Document=require("./Document");
 
-mongoose.connect("mongodb://localhost/SyncDB")
-  .then(() => console.log("Connected to MongoDB"))
+//const uri = "mongodb+srv://anmolpurohit04:password1234@anmol.gt69c.mongodb.net/admin/?retryWrites=true&w=majority";
+const url="mongodb://localhost:27017/";
+//const pratik_db="mongodb+srv://prajapatipm16:3ClpFm4uUsxIKPjM@portfolio.noz1l.mongodb.net/PortfolioDB?retryWrites=true&w=majority&appName=PortFolio";
+
+mongoose.connect(url)
+  .then(() => console.log(`Connected to MongoDB--->${mongoose.connection.host}`))
   .catch(err => console.log("Error connecting to MongoDB", err));
 
 
@@ -29,9 +33,14 @@ io.on("connection",socket=>{
             console.log(documentId);
         });
 
+        socket.on("file-imported",delta=>{
+            socket.broadcast.to(documentId).emit("receive-file", delta);
+        });
+
         socket.on("save-document",async data=>{
             await Document.findByIdAndUpdate(documentId,{data});
         });
+
     });
 
 });

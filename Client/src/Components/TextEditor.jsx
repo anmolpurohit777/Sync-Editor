@@ -1,10 +1,11 @@
-import React, { useCallback,useEffect, useState } from 'react'
+import { useCallback,useEffect, useState } from 'react'
 import Quill from 'quill'
 import "quill/dist/quill.snow.css"
 import '../index.css'
 import {io} from "socket.io-client"
 import { useParams } from "react-router-dom"
 import { exportToWord } from '../Utilities/exportToWord'
+import { importAsQuill } from '../Utilities/importAsQuill'
 
 const TOOLBAR_OPTIONS = [
   [{ font: [] }],
@@ -42,10 +43,17 @@ export default function TextEditor() {
     socket.emit("get-document",documentId);
 
     const toolbar = quill.getModule("toolbar");
-    const button = document.createElement("button");
-    button.innerHTML = "💾"; // Add an icon or text
-    button.addEventListener("click", () => exportToWord(quill)); // Attach the click handler
-    toolbar.container.appendChild(button); // Append the button to the toolbar
+
+    const saveButton = document.createElement("button");
+    saveButton.innerHTML = "💾";
+    saveButton.addEventListener("click", () => exportToWord(quill));
+    toolbar.container.appendChild(saveButton);
+
+    const importButton = document.createElement("button");
+    importButton.innerHTML = "📂";
+    importButton.addEventListener("click", () => importAsQuill(quill,socket));
+    toolbar.container.appendChild(importButton);
+
   },[socket,quill,documentId])
 
   useEffect(()=>{
@@ -74,6 +82,21 @@ export default function TextEditor() {
     }
   },[socket,quill]);
 
+  useEffect(() => {
+    if (socket == null || quill == null) return;
+  
+    // Listen for imported file changes
+    const handleFileImported = (delta) => {
+      quill.setContents(delta);
+    };
+  
+    socket.on("receive-file", handleFileImported);
+  
+    return () => {
+      socket.off("receive-file", handleFileImported);
+    };
+  }, [socket, quill]);
+
   useEffect(()=>{
     if(socket==null || quill==null)
         return;
@@ -97,7 +120,7 @@ export default function TextEditor() {
     q.disable();
     q.setText("Loading...");
     setQuill(q);
-    },[]);
+    },[]);  
 
   return (
     <>
